@@ -21,7 +21,7 @@
  */
 
 class Reaction {
-  const Reaction({required this.reactions, required this.reactedUserIds});
+  Reaction({required this.reactions, required this.reactedUserIds});
 
   factory Reaction.fromJson(Map<String, dynamic> json) {
     final reactionsData = json['reactions'];

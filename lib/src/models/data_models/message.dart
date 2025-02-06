@@ -37,8 +37,9 @@ class Message {
     this.messageType = MessageType.text,
     this.voiceMessageDuration,
     MessageStatus status = MessageStatus.pending,
-    this.reaction = const Reaction(reactions: [], reactedUserIds: []),
-  })  : _status = ValueNotifier(status),
+    Reaction? reaction,
+  })  : reaction = reaction ?? Reaction(reactions: [], reactedUserIds: []),
+        _status = ValueNotifier(status),
         assert(
           defaultTargetPlatform.isAudioWaveformsSupported ||
               !messageType.isVoice,
@@ -59,7 +60,7 @@ class Message {
           : const ReplyMessage(),
       reaction: reactionData is Map<String, dynamic>
           ? Reaction.fromJson(reactionData)
-          : const Reaction(reactions: [], reactedUserIds: []),
+          : Reaction(reactions: [], reactedUserIds: []),
       messageType: MessageType.tryParse(json['message_type']?.toString()) ??
           MessageType.text,
       voiceMessageDuration: Duration(
