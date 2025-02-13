@@ -26,3 +26,4 @@ export 'data_models/reply_message.dart';
 export 'data_models/suggestion_item_data.dart';
 export 'config_models/suggestion_item_config.dart';
 export 'data_models/cache_network_image_download_progress.dart';
+export 'config_models/chat_user_model_config.dart';

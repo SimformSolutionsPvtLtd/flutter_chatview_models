@@ -71,4 +71,7 @@ class Reaction {
       reactedUserIds: reactedUserIds ?? this.reactedUserIds,
     );
   }
+
+  @override
+  String toString() => '''Reaction(${toJson()})''';
 }

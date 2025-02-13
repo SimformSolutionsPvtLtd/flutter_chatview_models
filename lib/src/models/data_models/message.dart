@@ -159,4 +159,7 @@ class Message {
       status: status ?? this.status,
     );
   }
+
+  @override
+  String toString() => '''Message(${toJson()})''';
 }

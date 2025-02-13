@@ -23,6 +23,7 @@
 import '../../values/constants.dart';
 import '../../values/enumeration.dart';
 import '../../values/typedefs.dart';
+import '../config_models/chat_user_model_config.dart';
 
 class ChatUser {
   const ChatUser({
@@ -36,15 +37,27 @@ class ChatUser {
     this.networkImageProgressIndicatorBuilder,
   });
 
-  factory ChatUser.fromJson(Map<String, dynamic> json) => ChatUser(
-        id: json["id"],
-        name: json["name"],
-        profilePhoto: json["profilePhoto"],
-        imageType: ImageType.tryParse(json['imageType']?.toString()) ??
-            ImageType.network,
-        defaultAvatarImage:
-            json["defaultAvatarImage"]?.toString() ?? Constants.profileImage,
-      );
+  factory ChatUser.fromJson(
+    Map<String, dynamic> json, {
+    ChatUserModelConfigBase? config,
+  }) {
+    final idKey = config?.idKey ?? _idKey;
+    final nameKey = config?.nameKey ?? _nameKey;
+    final profilePhotoKey = config?.profilePhotoKey ?? _profilePhotoKey;
+    return ChatUser(
+      id: json[idKey]?.toString() ?? '',
+      name: json[nameKey]?.toString() ?? '',
+      profilePhoto: json[profilePhotoKey]?.toString(),
+      imageType: ImageType.tryParse(json['imageType']?.toString()) ??
+          ImageType.network,
+      defaultAvatarImage:
+          json["defaultAvatarImage"]?.toString() ?? Constants.profileImage,
+    );
+  }
+
+  static const String _idKey = 'id';
+  static const String _nameKey = 'name';
+  static const String _profilePhotoKey = 'profilePhoto';
 
   /// Provides id of user.
   final String id;
@@ -75,13 +88,15 @@ class ChatUser {
   final NetworkImageProgressIndicatorBuilder?
       networkImageProgressIndicatorBuilder;
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'profilePhoto': profilePhoto,
-        'imageType': imageType.name,
-        'defaultAvatarImage': defaultAvatarImage,
-      };
+  Map<String, dynamic> toJson({ChatUserModelConfigBase? config}) {
+    return {
+      _idKey: config?.idKey ?? id,
+      _nameKey: config?.nameKey ?? name,
+      _profilePhotoKey: config?.profilePhotoKey ?? profilePhoto,
+      'imageType': imageType.name,
+      'defaultAvatarImage': defaultAvatarImage,
+    };
+  }
 
   ChatUser copyWith({
     String? id,
@@ -100,4 +115,7 @@ class ChatUser {
       defaultAvatarImage: defaultAvatarImage ?? this.defaultAvatarImage,
     );
   }
+
+  @override
+  String toString() => '''ChatUser(${toJson()})''';
 }

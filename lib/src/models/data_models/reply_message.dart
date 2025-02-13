@@ -94,4 +94,7 @@ class ReplyMessage {
           : voiceMessageDuration ?? this.voiceMessageDuration,
     );
   }
+
+  @override
+  String toString() => '''ReplyMessage(${toJson()})''';
 }
