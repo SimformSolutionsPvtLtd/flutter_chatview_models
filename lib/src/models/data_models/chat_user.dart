@@ -117,5 +117,20 @@ class ChatUser {
   }
 
   @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ChatUser &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          profilePhoto == other.profilePhoto &&
+          imageType == other.imageType &&
+          defaultAvatarImage == other.defaultAvatarImage;
+
+  @override
+  int get hashCode =>
+      Object.hash(id, name, profilePhoto, imageType, defaultAvatarImage);
+
+  @override
   String toString() => '''ChatUser(${toJson()})''';
 }

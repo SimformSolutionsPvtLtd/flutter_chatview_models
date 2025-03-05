@@ -174,6 +174,13 @@ final class ChatController {
     return user;
   }
 
+  /// Function for updating the details of an existing user (other users).
+  ///
+  /// **Parameters:**
+  /// - (required): [chatUser] The updated `ChatUser` object containing new user details.
+  void updateOtherUser(ChatUser chatUser) =>
+      _otherUsers[chatUser.id] = chatUser;
+
   /// Used to dispose ValueNotifiers and Streams.
   void dispose() {
     _showTypingIndicator.dispose();
