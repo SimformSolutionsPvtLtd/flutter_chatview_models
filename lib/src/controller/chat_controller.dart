@@ -31,7 +31,7 @@ import '../models/data_models/message.dart';
 import '../models/data_models/suggestion_item_data.dart';
 import '../values/constants.dart';
 
-final class ChatController {
+base class ChatController {
   ChatController({
     required this.initialMessageList,
     required this.scrollController,

@@ -36,6 +36,8 @@ class Message {
     this.replyMessage = const ReplyMessage(),
     this.messageType = MessageType.text,
     this.voiceMessageDuration,
+    this.updateAt,
+    this.update,
     MessageStatus status = MessageStatus.pending,
     Reaction? reaction,
   })  : reaction = reaction ?? Reaction(reactions: [], reactedUserIds: []),
@@ -47,8 +49,9 @@ class Message {
         );
 
   factory Message.fromJson(Map<String, dynamic> json) {
-    final replyMessageData = json['reply_message'];
-    final reactionData = json['reaction'];
+    final replyMessageData = json[_replyMessage];
+    final updateData = json[_update];
+    final reactionData = json[_reaction];
     return Message(
       id: json['id']?.toString() ?? '',
       message: json['message']?.toString() ?? '',
@@ -64,13 +67,20 @@ class Message {
       messageType: MessageType.tryParse(json['message_type']?.toString()) ??
           MessageType.text,
       voiceMessageDuration: Duration(
-        microseconds:
-            int.tryParse(json['voice_message_duration'].toString()) ?? 0,
+        microseconds: int.tryParse(json[_voiceMessageDuration].toString()) ?? 0,
       ),
       status: MessageStatus.tryParse(json['status']?.toString()) ??
           MessageStatus.pending,
+      update: updateData is Map<String, dynamic> ? updateData : null,
+      updateAt: DateTime.tryParse(json[_updateAt].toString()),
     );
   }
+
+  static const String _replyMessage = 'reply_message';
+  static const String _reaction = 'reaction';
+  static const String _voiceMessageDuration = 'voice_message_duration';
+  static const String _updateAt = 'update_at';
+  static const String _update = 'update';
 
   /// Unique identifier for the message.
   final String id;
@@ -98,6 +108,10 @@ class Message {
   /// {@macro flutter_chatview_models.enumeration.MessageType}
   final MessageType messageType;
 
+  final DateTime? updateAt;
+
+  final Map<String, dynamic>? update;
+
   /// Status of the message.
   final ValueNotifier<MessageStatus> _status;
 
@@ -120,17 +134,36 @@ class Message {
   /// for configured listeners.
   set setStatus(MessageStatus messageStatus) => _status.value = messageStatus;
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'message': message,
-        'createdAt': createdAt.toIso8601String(),
-        'sentBy': sentBy,
-        'reply_message': replyMessage.toJson(),
-        'reaction': reaction.toJson(),
-        'message_type': messageType.name,
-        'voice_message_duration': voiceMessageDuration?.inMicroseconds,
-        'status': _status.value.name,
-      };
+  Map<String, dynamic> toJson({includeNullValues = true}) {
+    final data = <String, dynamic>{
+      'id': id,
+      'message': message,
+      'createdAt': createdAt.toIso8601String(),
+      'sentBy': sentBy,
+      'status': _status.value.name,
+      'message_type': messageType.name,
+    };
+
+    if (includeNullValues) {
+      data[_replyMessage] = replyMessage.toJson();
+      data[_reaction] = reaction.toJson();
+      data[_voiceMessageDuration] = voiceMessageDuration?.inMicroseconds;
+      data[_updateAt] = updateAt?.toIso8601String();
+      data[_update] = update;
+    } else {
+      if (!replyMessage.isEmpty) data[_replyMessage] = replyMessage.toJson();
+      if (!reaction.isEmpty) data[_reaction] = reaction.toJson();
+      if (voiceMessageDuration case final duration?) {
+        data[_voiceMessageDuration] = duration.inMicroseconds;
+      }
+      if (updateAt case final updateAt?) {
+        data[_updateAt] = updateAt.toIso8601String();
+      }
+      if (update?.isNotEmpty ?? false) data[_update] = update;
+    }
+
+    return data;
+  }
 
   Message copyWith({
     String? id,
@@ -143,6 +176,8 @@ class Message {
     MessageType? messageType,
     Duration? voiceMessageDuration,
     MessageStatus? status,
+    DateTime? updateAt,
+    Map<String, String>? update,
     bool forceNullValue = false,
   }) {
     return Message(
@@ -156,6 +191,8 @@ class Message {
           : voiceMessageDuration ?? this.voiceMessageDuration,
       reaction: reaction ?? this.reaction,
       replyMessage: replyMessage ?? this.replyMessage,
+      updateAt: forceNullValue ? updateAt : updateAt ?? this.updateAt,
+      update: forceNullValue ? update : update ?? this.update,
       status: status ?? this.status,
     );
   }

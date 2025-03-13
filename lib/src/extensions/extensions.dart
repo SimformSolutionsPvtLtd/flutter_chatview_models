@@ -1,5 +1,8 @@
 import 'package:flutter/widgets.dart';
 
+import '../models/data_models/reaction.dart';
+import '../models/data_models/reply_message.dart';
+
 extension TargetPlatformExtension on TargetPlatform {
   bool get isAndroid => this == TargetPlatform.android;
 
@@ -7,6 +10,18 @@ extension TargetPlatformExtension on TargetPlatform {
 
   // TODO: As audio_waveforms(https://pub.dev/packages/audio_waveforms) only supports Android & iOS as of now.
   bool get isAudioWaveformsSupported => isIOS || isAndroid;
+}
+
+extension ReplyMessageExteension on ReplyMessage {
+  bool get isEmpty =>
+      messageId.isEmpty &&
+      message.isEmpty &&
+      replyTo.isEmpty &&
+      replyBy.isEmpty;
+}
+
+extension ReactionExteension on Reaction {
+  bool get isEmpty => reactions.isEmpty && reactedUserIds.isEmpty;
 }
 
 extension ListExtension<T> on List<T> {
