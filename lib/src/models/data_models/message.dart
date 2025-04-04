@@ -22,17 +22,18 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+
 import '../../extensions/extensions.dart';
+import '../../values/enumeration.dart';
 import 'reaction.dart';
 import 'reply_message.dart';
-import '../../values/enumeration.dart';
 
 class Message {
   Message({
-    this.id = '',
     required this.message,
     required this.createdAt,
     required this.sentBy,
+    this.id = '',
     this.replyMessage = const ReplyMessage(),
     this.messageType = MessageType.text,
     this.voiceMessageDuration,
@@ -45,7 +46,7 @@ class Message {
         assert(
           defaultTargetPlatform.isAudioWaveformsSupported ||
               !messageType.isVoice,
-          "Voice messages are only supported with android and ios platform",
+          'Voice messages are only supported with android and ios platform',
         );
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -88,7 +89,8 @@ class Message {
   /// Key for accessing the widget's render box.
   final GlobalKey key = GlobalKey();
 
-  /// The message content, which can be text, an image path, or an audio file path.
+  /// The message content, which can be text, an image path,
+  /// or an audio file path.
   final String message;
 
   /// The date and time when the message was created.
@@ -134,7 +136,7 @@ class Message {
   /// for configured listeners.
   set setStatus(MessageStatus messageStatus) => _status.value = messageStatus;
 
-  Map<String, dynamic> toJson({includeNullValues = true}) {
+  Map<String, dynamic> toJson({bool includeNullValues = true}) {
     final data = <String, dynamic>{
       'id': id,
       'message': message,

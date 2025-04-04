@@ -19,11 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+export 'config/chat_user_config_base.dart';
+export 'config/suggestion_item_config.dart';
+export 'data_models/cache_network_image_download_progress.dart';
 export 'data_models/chat_user.dart';
 export 'data_models/message.dart';
 export 'data_models/reaction.dart';
 export 'data_models/reply_message.dart';
 export 'data_models/suggestion_item_data.dart';
-export 'config_models/suggestion_item_config.dart';
-export 'data_models/cache_network_image_download_progress.dart';
-export 'config_models/chat_user_model_config.dart';

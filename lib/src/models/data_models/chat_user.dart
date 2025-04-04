@@ -20,11 +20,14 @@
  * SOFTWARE.
  */
 
+import 'package:flutter/foundation.dart';
+
 import '../../values/constants.dart';
 import '../../values/enumeration.dart';
 import '../../values/typedefs.dart';
-import '../config_models/chat_user_model_config.dart';
+import '../config/chat_user_config_base.dart';
 
+@immutable
 class ChatUser {
   const ChatUser({
     required this.id,
@@ -39,7 +42,7 @@ class ChatUser {
 
   factory ChatUser.fromJson(
     Map<String, dynamic> json, {
-    ChatUserModelConfigBase? config,
+    ChatUserConfigBase? config,
   }) {
     final idKey = config?.idKey ?? _idKey;
     final nameKey = config?.nameKey ?? _nameKey;
@@ -51,7 +54,7 @@ class ChatUser {
       imageType: ImageType.tryParse(json['imageType']?.toString()) ??
           ImageType.network,
       defaultAvatarImage:
-          json["defaultAvatarImage"]?.toString() ?? Constants.profileImage,
+          json['defaultAvatarImage']?.toString() ?? Constants.profileImage,
     );
   }
 
@@ -88,7 +91,7 @@ class ChatUser {
   final NetworkImageProgressIndicatorBuilder?
       networkImageProgressIndicatorBuilder;
 
-  Map<String, dynamic> toJson({ChatUserModelConfigBase? config}) {
+  Map<String, dynamic> toJson({ChatUserConfigBase? config}) {
     return {
       _idKey: config?.idKey ?? id,
       _nameKey: config?.nameKey ?? name,

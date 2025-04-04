@@ -1,7 +1,7 @@
 /// This class provides a structure for specifying custom JSON key mappings
 /// for user properties, ensuring flexibility in parsing and serializing
 /// different user data formats.
-abstract interface class ChatUserModelConfigBase {
+abstract interface class ChatUserConfigBase {
   /// The JSON key used for uniquely identifying a user.
   String? get idKey;
 

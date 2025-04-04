@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import '../config_models/suggestion_item_config.dart';
+import '../config/suggestion_item_config.dart';
 
 class SuggestionItemData {
   const SuggestionItemData({required this.text, this.config});

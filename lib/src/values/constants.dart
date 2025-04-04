@@ -22,7 +22,7 @@
 
 abstract final class Constants {
   static const String profileImage =
-      "https://github.com/SimformSolutionsPvtLtd/flutter_chatview/blob/main/example/assets/images/simform.png?raw=true";
+      'https://github.com/SimformSolutionsPvtLtd/flutter_chatview/blob/main/example/assets/images/simform.png?raw=true';
 
   static const Duration scrollToAnimateDuration = Duration(milliseconds: 300);
   static const Duration scrollToLastTimerDuration = Duration(milliseconds: 300);

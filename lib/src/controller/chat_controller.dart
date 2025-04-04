@@ -21,8 +21,8 @@
  */
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 import '../extensions/extensions.dart';
@@ -51,28 +51,31 @@ base class ChatController {
   /// Represents list of chat users
   List<ChatUser> get otherUsers => _otherUsers.values.toList();
 
+  Map<String, ChatUser> get otherUsersMap => Map.of(_otherUsers);
+
   /// Provides current user which is sending messages.
   final ChatUser currentUser;
 
   /// Allow user to show typing indicator defaults to false.
   final ValueNotifier<bool> _showTypingIndicator = ValueNotifier(false);
 
-  /// TypingIndicator as [ValueListenable] for [GroupedChatList] widget's typingIndicator [ValueListenableBuilder].
+  /// TypingIndicator as [ValueListenable] for `GroupedChatList` widget's
+  /// typingIndicator [ValueListenableBuilder].
   ///  Use this for listening typing indicators
   ///   ```dart
-  ///    chatcontroller.typingIndicatorNotifier.addListener((){});
+  ///    chatController.typingIndicatorNotifier.addListener((){});
   ///  ```
   /// For more functionalities see [ValueListenable].
   ValueListenable<bool> get typingIndicatorNotifier => _showTypingIndicator;
 
-  /// Getter for typingIndicator value instead of accessing [_showTypingIndicator.value]
-  /// for better accessibility.
+  /// Indicates whether the typing indicator is displayed.
+  /// Returns `true` if the typing indicator is shown, otherwise `false`
   bool get showTypingIndicator => _showTypingIndicator.value;
 
   /// Setter for changing values of typingIndicator
   /// ```dart
-  ///  chatContoller.setTypingIndicator = true; // for showing indicator
-  ///  chatContoller.setTypingIndicator = false; // for hiding indicator
+  ///  chatController.setTypingIndicator = true; // for showing indicator
+  ///  chatController.setTypingIndicator = false; // for hiding indicator
   ///  ````
   set setTypingIndicator(bool value) => _showTypingIndicator.value = value;
 
@@ -80,10 +83,11 @@ base class ChatController {
   final ValueNotifier<List<SuggestionItemData>> _replySuggestion =
       ValueNotifier([]);
 
-  /// newSuggestions as [ValueListenable] for [SuggestionList] widget's [ValueListenableBuilder].
+  /// newSuggestions as [ValueListenable] for `SuggestionList` widget's
+  /// [ValueListenableBuilder].
   ///  Use this to listen when suggestion gets added
   ///   ```dart
-  ///    chatcontroller.newSuggestions.addListener((){});
+  ///    chatController.newSuggestions.addListener((){});
   ///  ```
   /// For more functionalities see [ValueListenable].
   ValueListenable<List<SuggestionItemData>> get newSuggestions =>
@@ -177,7 +181,8 @@ base class ChatController {
   /// Function for updating the details of an existing user (other users).
   ///
   /// **Parameters:**
-  /// - (required): [chatUser] The updated `ChatUser` object containing new user details.
+  /// - (required): [chatUser] The updated `ChatUser` object containing new
+  /// user details.
   void updateOtherUser(ChatUser chatUser) =>
       _otherUsers[chatUser.id] = chatUser;
 
