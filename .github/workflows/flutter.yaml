@@ -1,0 +1,34 @@
+name: Build
+
+on:
+  push:
+    paths:
+      - '**.dart'
+      - '**.yaml'
+      - '**.yml'
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout input branch from github
+        uses: actions/checkout@v4.1.1
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2.13.0
+        with:
+          flutter-version: '3.19.0'
+          cache: true
+          cache-key: 'flutter-macos-stable-3.19.0'
+          cache-path: '${{ runner.tool_cache }}/flutter/macos-stable-3.19.0'
+          pub-cache-key: 'flutter-pub-macos-stable-3.19.0'
+      - name: Flutter pub get
+        run: flutter pub get
+      - name: Code Formatting
+        run: dart format --set-exit-if-changed .
+      - name: Check Publish Warnings
+        run: flutter pub publish --dry-run

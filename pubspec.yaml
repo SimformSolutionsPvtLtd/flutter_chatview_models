@@ -5,7 +5,7 @@ repository: https://github.com/SimformSolutionsPvtLtd/flutter_chatview_models
 issue_tracker: https://github.com/SimformSolutionsPvtLtd/flutter_chatview_models/issues
 
 environment:
-  sdk: '>=3.2.0 <4.0.0'
+  sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
   flutter:
