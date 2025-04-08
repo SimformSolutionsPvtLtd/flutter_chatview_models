@@ -26,6 +26,16 @@ extension ReactionExteension on Reaction {
 }
 
 extension ListExtension<T> on List<T> {
+  /// Returns the first element that matches [test], or `null` if none found.
+  T? firstWhereOrNull(bool Function(T element) test) {
+    final valuesLength = length;
+    for (var i = 0; i < valuesLength; i++) {
+      final element = this[i];
+      if (test(element)) return element;
+    }
+    return null;
+  }
+
   /// Extension method to convert a list to a map with customizable key-value pairs.
   /// * required: [getKey] to extract the key from each element of the list.
   ///
