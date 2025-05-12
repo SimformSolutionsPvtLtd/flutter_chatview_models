@@ -1,6 +1,6 @@
 name: chatview_models
 description: Utility library for the chatview and chatview_db_connection libraries which contains shared type declarations. Should not be used directly.
-version: 1.0.0
+version: 0.0.1
 repository: https://github.com/SimformSolutionsPvtLtd/chatview_models
 issue_tracker: https://github.com/SimformSolutionsPvtLtd/chatview_models/issues
 
