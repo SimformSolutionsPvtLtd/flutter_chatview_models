@@ -56,7 +56,7 @@ class ReplyMessage {
 
   /// Represents the type of reply message.
   ///
-  /// {@macro flutter_chatview_models.enumeration.MessageType}
+  /// {@macro chatview_models.enumeration.MessageType}
   final MessageType messageType;
 
   /// Provides max duration for recorded voice message.

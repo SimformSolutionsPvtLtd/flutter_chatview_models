@@ -107,7 +107,7 @@ class Message {
 
   /// Represents the type of message.
   ///
-  /// {@macro flutter_chatview_models.enumeration.MessageType}
+  /// {@macro chatview_models.enumeration.MessageType}
   final MessageType messageType;
 
   final DateTime? updateAt;
@@ -122,7 +122,7 @@ class Message {
 
   /// Provides message's current status.
   ///
-  /// {@macro flutter_chatview_models.enumeration.MessageStatus}
+  /// {@macro chatview_models.enumeration.MessageStatus}
   MessageStatus get status => _status.value;
 
   /// A [ValueListenable] for [MessageStatus] that notifies listeners

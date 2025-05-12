@@ -1,8 +1,8 @@
-name: flutter_chatview_models
-description: Utility library for the chatview and flutter_chatview_db_connection libraries which contains shared type declarations. Should not be used directly.
+name: chatview_models
+description: Utility library for the chatview and chatview_db_connection libraries which contains shared type declarations. Should not be used directly.
 version: 1.0.0
-repository: https://github.com/SimformSolutionsPvtLtd/flutter_chatview_models
-issue_tracker: https://github.com/SimformSolutionsPvtLtd/flutter_chatview_models/issues
+repository: https://github.com/SimformSolutionsPvtLtd/chatview_models
+issue_tracker: https://github.com/SimformSolutionsPvtLtd/chatview_models/issues
 
 environment:
   sdk: '>=3.4.0 <4.0.0'

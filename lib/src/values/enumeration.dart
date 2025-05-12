@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-/// {@template flutter_chatview_models.enumeration.MessageType}
+/// {@template chatview_models.enumeration.MessageType}
 /// Defines the various message types in ChatView.
 /// - [image]: An image message.
 /// - [text]: A text message.
@@ -59,7 +59,7 @@ enum MessageType {
   }
 }
 
-/// {@template flutter_chatview_models.enumeration.TypeWriterStatus}
+/// {@template chatview_models.enumeration.TypeWriterStatus}
 /// Indicates whether the user is currently typing or has finished typing.
 /// - [typing]: User is still typing.
 /// - [typed]: User has completed typing.
@@ -73,7 +73,7 @@ enum TypeWriterStatus {
   bool get isTyped => this == typed;
 }
 
-/// {@template flutter_chatview_models.enumeration.MessageStatus}
+/// {@template chatview_models.enumeration.MessageStatus}
 /// Represents the current state of a message from sending to delivery.
 /// - [read]: Opened by the recipient.
 /// - [delivered]: Successfully delivered.
@@ -110,7 +110,7 @@ enum MessageStatus {
   }
 }
 
-/// {@template flutter_chatview_models.enumeration.ImageType}
+/// {@template chatview_models.enumeration.ImageType}
 /// Defines the different types of image sources.
 /// - [asset]: Image from local assets.
 /// - [network]: Image from a network URL.
@@ -141,7 +141,7 @@ enum ImageType {
   }
 }
 
-/// {@template flutter_chatview_models.enumeration.ChatViewState}
+/// {@template chatview_models.enumeration.ChatViewState}
 /// Represents the different states of the chat view.
 /// - [hasMessages]: Chat has messages to display.
 /// - [noData]: No messages available.
