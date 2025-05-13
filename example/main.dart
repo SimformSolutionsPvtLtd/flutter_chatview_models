@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:chatview_models/chatview_models.dart';
+import 'package:chatview_utility/chatview_utility.dart';
 
 void main() {
   // Create sample users
@@ -10,7 +10,7 @@ void main() {
     profilePhoto: Constants.profileImage,
   );
 
-  log(currentUser.toString(), name: 'ChatView Models');
+  log(currentUser.toString(), name: 'ChatView Utility');
 
   const otherUsers = [
     ChatUser(
@@ -20,7 +20,7 @@ void main() {
     ),
   ];
 
-  log(otherUsers.map((e) => e.toString()).toString(), name: 'ChatView Models');
+  log(otherUsers.map((e) => e.toString()).toString(), name: 'ChatView Utility');
 
   // Create some initial messages
   final messages = [
@@ -40,7 +40,7 @@ void main() {
     ),
   ];
 
-  log(messages.map((e) => e.toString()).toString(), name: 'ChatView Models');
+  log(messages.map((e) => e.toString()).toString(), name: 'ChatView Utility');
 
   // Demonstrate reaction
   final reaction = Reaction(
@@ -48,7 +48,7 @@ void main() {
     reactions: ['👍'],
   );
 
-  log(reaction.toString(), name: 'ChatView Models');
+  log(reaction.toString(), name: 'ChatView Utility');
 
   // Demonstrate reply
   final replyMessage = Message(
@@ -65,5 +65,5 @@ void main() {
       replyBy: currentUser.id,
     ),
   );
-  log(replyMessage.toString(), name: 'ChatView Models');
+  log(replyMessage.toString(), name: 'ChatView Utility');
 }

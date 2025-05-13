@@ -1,8 +1,8 @@
-name: chatview_models
-description: Utility library for the chatview and chatview_db_connection libraries which contains shared type declarations. Should not be used directly.
+name: chatview_utility
+description: Utility library for the chatview and chatview_db_connection libraries, containing shared type declarations. It should not be used directly.
 version: 0.0.1
-repository: https://github.com/SimformSolutionsPvtLtd/chatview_models
-issue_tracker: https://github.com/SimformSolutionsPvtLtd/chatview_models/issues
+repository: https://github.com/SimformSolutionsPvtLtd/chatview_utility
+issue_tracker: https://github.com/SimformSolutionsPvtLtd/chatview_utility/issues
 
 environment:
   sdk: '>=3.4.0 <4.0.0'

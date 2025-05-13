@@ -78,7 +78,7 @@ class ChatUser {
 
   /// Field to define image type.
   ///
-  /// {@macro chatview_models.enumeration.ImageType}
+  /// {@macro chatview_utility.enumeration.ImageType}
   final ImageType imageType;
 
   /// Error builder to build error widget for asset image
