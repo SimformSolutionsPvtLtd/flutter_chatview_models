@@ -31,7 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  chatview_utility:
+  chatview_utils:
     path: ..
 
 dev_dependencies:
