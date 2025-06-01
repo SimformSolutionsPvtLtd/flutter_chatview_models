@@ -87,7 +87,7 @@ class Message {
   final String id;
 
   /// Key for accessing the widget's render box.
-  final GlobalKey key = GlobalKey();
+  late final GlobalKey key = GlobalKey(debugLabel: id);
 
   /// The message content, which can be text, an image path,
   /// or an audio file path.
@@ -201,4 +201,39 @@ class Message {
 
   @override
   String toString() => '''Message(${toJson()})''';
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Message &&
+        other.id == id &&
+        other.key == key &&
+        other.message == message &&
+        other.createdAt == createdAt &&
+        other.sentBy == sentBy &&
+        other.replyMessage == replyMessage &&
+        other.reaction == reaction &&
+        other.messageType == messageType &&
+        other.voiceMessageDuration == voiceMessageDuration &&
+        other.status == status &&
+        mapEquals(other.update, update) &&
+        other.updateAt == updateAt;
+  }
+
+  @override
+  int get hashCode => Object.hashAllUnordered([
+        id,
+        key,
+        message,
+        createdAt,
+        sentBy,
+        replyMessage,
+        reaction,
+        messageType,
+        voiceMessageDuration,
+        status,
+        update,
+        updateAt,
+      ]);
 }
