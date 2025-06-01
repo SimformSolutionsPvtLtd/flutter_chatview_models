@@ -29,6 +29,7 @@ import '../models/data_models/chat_user.dart';
 import '../models/data_models/message.dart';
 import '../models/data_models/suggestion_item_data.dart';
 import '../values/constants.dart';
+import '../values/enumeration.dart';
 
 base class ChatController {
   ChatController({
@@ -110,9 +111,18 @@ base class ChatController {
   }
 
   /// Function for loading data while pagination.
-  void loadMoreData(List<Message> messageList) {
-    /// Here, we have passed 0 index as we need to add data before first data
-    initialMessageList.insertAll(0, messageList);
+  /// [direction] is used to determine whether to load previous or next data.
+  void loadMoreData(
+    List<Message> messageList, {
+    ChatPaginationDirection direction = ChatPaginationDirection.previous,
+  }) {
+    if (direction.isPrevious) {
+      // Passed 0 index as we need to add data before first data
+      initialMessageList.insertAll(0, messageList);
+    } else {
+      initialMessageList.addAll(messageList);
+    }
+
     if (messageStreamController.isClosed) return;
     messageStreamController.sink.add(initialMessageList);
   }
