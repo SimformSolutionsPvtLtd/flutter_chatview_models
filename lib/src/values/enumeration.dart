@@ -162,3 +162,21 @@ enum ChatViewState {
 
   bool get isError => this == error;
 }
+
+/// {@template chatview_utils.enumeration.ChatPaginationDirection}
+/// Defines the direction for pagination in the chat view.
+/// - [previous]: Load previous messages when reached to the top of the chat
+/// list.
+/// - [next]: Load next messages when reached to the bottom of the chat list.
+/// {@endtemplate}
+enum ChatPaginationDirection {
+  /// Load previous messages when reached to the top of the chat list.
+  previous,
+
+  /// Load next messages when reached to the bottom of the chat list.
+  next;
+
+  bool get isPrevious => this == previous;
+
+  bool get isNext => this == next;
+}

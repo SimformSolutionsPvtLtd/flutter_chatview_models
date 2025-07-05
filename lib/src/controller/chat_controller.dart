@@ -29,6 +29,7 @@ import '../models/data_models/chat_user.dart';
 import '../models/data_models/message.dart';
 import '../models/data_models/suggestion_item_data.dart';
 import '../values/constants.dart';
+import '../values/enumeration.dart';
 
 base class ChatController {
   ChatController({
@@ -39,6 +40,9 @@ base class ChatController {
   }) : _otherUsers = otherUsers.toMap<String, ChatUser>(
           getKey: (user) => user.id,
         );
+
+  /// Caches old message list before replacing it with a temporary new one.
+  final Set<Message> _oldMessageList = {};
 
   /// Represents initial message list in chat which can be add by user.
   List<Message> initialMessageList;
@@ -51,6 +55,11 @@ base class ChatController {
   List<ChatUser> get otherUsers => _otherUsers.values.toList();
 
   Map<String, ChatUser> get otherUsersMap => Map.of(_otherUsers);
+
+  /// Signifies whether there's an initial message list cached when it was
+  /// replaced with a temporary one (like for showing really old reply
+  /// message or searched message).
+  bool get canRevertToInitialMessageList => _oldMessageList.isNotEmpty;
 
   /// Provides current user which is sending messages.
   final ChatUser currentUser;
@@ -100,19 +109,70 @@ base class ChatController {
   void removeReplySuggestions() => _replySuggestion.value = [];
 
   /// Represents message stream of chat
-  StreamController<List<Message>> messageStreamController = StreamController();
+  final StreamController<List<Message>> messageStreamController =
+      StreamController.broadcast();
+
+  /// Callback enabling reset of ListView when scrolling to the top is
+  /// inefficient.
+  late VoidCallback? _listViewResetCallback;
 
   /// Used to add message in message list.
   void addMessage(Message message) {
+    // New message should always be added to the initial message list and not
+    // to the temporary one.
+    revertToInitialMessageList(shouldStream: false);
     initialMessageList.add(message);
     if (messageStreamController.isClosed) return;
     messageStreamController.sink.add(initialMessageList);
   }
 
+  /// Caches the existing message list before replacing it with a temporary new
+  /// one. Useful for features like loading up really old reply message or
+  /// searching for some message.
+  void replaceMessageList(List<Message> messageList) {
+    _oldMessageList
+      ..clear()
+      ..addAll(initialMessageList.toList());
+    initialMessageList = messageList;
+    if (messageStreamController.isClosed) return;
+    messageStreamController.sink.add(initialMessageList);
+  }
+
+  /// Enables reverting to the initial message list, replacing the temporary
+  /// message list set using [replaceMessageList].
+  void revertToInitialMessageList({bool shouldStream = true}) {
+    // If _oldMessageList is empty, it means no previous state to revert to.
+    if (_oldMessageList.isEmpty) return;
+
+    initialMessageList = _oldMessageList.toList();
+    if (messageStreamController.isClosed || !shouldStream) return;
+    messageStreamController.sink.add(initialMessageList);
+  }
+
   /// Function for loading data while pagination.
-  void loadMoreData(List<Message> messageList) {
-    /// Here, we have passed 0 index as we need to add data before first data
-    initialMessageList.insertAll(0, messageList);
+  /// [direction] is used to determine whether to load previous or next data.
+  void loadMoreData(
+    List<Message> messageList, {
+    ChatPaginationDirection direction = ChatPaginationDirection.previous,
+  }) {
+    if (direction.isPrevious) {
+      // Passed 0 index as we need to add data before first data
+      initialMessageList.insertAll(0, messageList);
+    } else {
+      initialMessageList.addAll(messageList);
+
+      // Check if we've fetched partial (or all) messages of the old message
+      // list.
+      if (_oldMessageList.isNotEmpty) {
+        final difference = _oldMessageList.difference(messageList.toSet());
+        final differenceCount = difference.length;
+        if (differenceCount != 0 && differenceCount != _oldMessageList.length) {
+          initialMessageList.addAll(difference);
+          _oldMessageList.clear();
+        }
+      }
+    }
+
     if (messageStreamController.isClosed) return;
     messageStreamController.sink.add(initialMessageList);
   }
@@ -158,17 +218,18 @@ base class ChatController {
   }
 
   /// Function to scroll to last messages in chat view
-  void scrollToLastMessage() => Timer(
-        Constants.scrollToLastTimerDuration,
-        () {
-          if (!scrollController.hasClients) return;
-          scrollController.animateTo(
-            scrollController.positions.last.minScrollExtent,
-            curve: Curves.easeIn,
-            duration: Constants.scrollToAnimateDuration,
-          );
-        },
-      );
+  void scrollToLastMessage({
+    Duration waitFor = Constants.scrollToLastTimerDuration,
+    Duration scrollFor = Constants.scrollToAnimateDuration,
+  }) {
+    Timer(
+      waitFor,
+      () {
+        if (!scrollController.hasClients) return;
+        _onScroll(duration: scrollFor);
+      },
+    );
+  }
 
   /// Function for getting ChatUser object from user id
   ChatUser getUserFromId(String userId) {
@@ -191,5 +252,51 @@ base class ChatController {
     _replySuggestion.dispose();
     scrollController.dispose();
     messageStreamController.close();
+  }
+
+  /// Register the ListView reset callback. Internal use only.
+  void registerListViewReset(VoidCallback callback) =>
+      _listViewResetCallback = callback;
+
+  /// Handles the scroll event assuming [_oldMessageList] would be the most
+  /// latest messages list and keeping in mind flutter's limitation of
+  /// scrolling past large amount of pixels.
+  void _onScroll({required Duration duration}) {
+    if (canRevertToInitialMessageList) revertToInitialMessageList();
+
+    // Calculate smooth scroll limit based on device capabilities
+    final scrollThreshold = _calculateScrollThreshold(
+      animationDuration: duration,
+      viewPortDimension: scrollController.position.viewportDimension,
+    );
+
+    if (scrollController.offset > scrollThreshold) {
+      // Reset messages' list state to display starting position
+      // directly instead of animating or jumping to the said
+      // position.
+      _listViewResetCallback?.call();
+    } else {
+      scrollController.animateTo(
+        scrollController.positions.last.minScrollExtent,
+        duration: duration,
+        curve: Curves.easeIn,
+      );
+    }
+  }
+
+  /// Calculates the scroll threshold based on the animation duration and
+  /// viewport dimension which can be achieved smoothly.
+  double _calculateScrollThreshold({
+    required Duration animationDuration,
+    required double viewPortDimension,
+  }) {
+    // Assume 60 FPS, approximately 17ms per frame
+    const msPerFrame = 17;
+    final totalFrames = animationDuration.inMilliseconds / msPerFrame;
+
+    // Conservative estimate: 60% of viewport dimension per frame
+    final pixelsPerFrame = viewPortDimension * 0.6;
+
+    return totalFrames * pixelsPerFrame;
   }
 }
