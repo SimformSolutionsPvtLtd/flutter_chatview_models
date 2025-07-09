@@ -117,6 +117,21 @@ base class ChatController {
     messageStreamController.sink.add(initialMessageList);
   }
 
+  /// Function for update message by Digvijaysinh Chauhan
+  void updateMessage({
+    required String messageId,
+    required Message newMessage,
+  }) {
+    final message = initialMessageList.firstWhereOrNull(
+          (message) => message.id == messageId,
+    );
+    if (message == null) throw Exception('Message Not Found!');
+    final indexOfMessage = initialMessageList.indexOf(message);
+    initialMessageList[indexOfMessage] = newMessage;
+    if (messageStreamController.isClosed) return;
+    messageStreamController.sink.add(initialMessageList);
+  }
+
   /// Function for setting reaction on specific chat bubble
   void setReaction({
     required String emoji,
